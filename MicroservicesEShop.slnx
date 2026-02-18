@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/doc/">
+    <File Path="Migrations.txt" />
+    <File Path="NuGet packages explanation.txt" />
+  </Folder>
   <Folder Name="/FrontEnd/" />
   <Folder Name="/Gateway/" />
   <Folder Name="/Integration/" />
