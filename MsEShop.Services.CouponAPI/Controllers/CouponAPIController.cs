@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MsEShop.Services.CouponAPI.Data;
 using MsEShop.Services.CouponAPI.Models;
 using MsEShop.Services.CouponAPI.Models.Dto;
@@ -57,16 +58,84 @@ namespace MsEShop.Services.CouponAPI.Controllers
 
         [HttpGet]
         [Route("GetByCode/{code}")]
-        public ResponseDto GetByCode(string code) {
+        public ResponseDto GetByCode(string code)
+        {
             try
             {
                 Coupon coupon = _db.Coupons.First(c => c.Code == code);
-                _response.Result= _mapper.Map<CouponDto>(coupon);
+                _response.Result = _mapper.Map<CouponDto>(coupon);
             }
             catch (Exception e)
             {
-                _response.Success= false;
+                _response.Success = false;
                 _response.Message = e.Message;
+            }
+            return _response;
+        }
+
+        [HttpPost]
+        public ResponseDto Post([FromBody] CouponDto couponDto)
+        {
+            try
+            {
+                Coupon coupon = _mapper.Map<Coupon>(couponDto);
+                coupon.CreatedOn = DateTime.Now;
+                coupon.LastUpdatedOn = DateTime.Now;
+                _db.Coupons.Add(coupon);
+                _db.SaveChanges();
+                _response.Result = _mapper.Map<CouponDto>(coupon);
+                _response.Success = true;
+                _response.Message = "Created sucesfully";
+                return _response;
+            }
+            catch (Exception e)
+            {
+                _response.Success = false;
+                _response.Message = "Error creating: " + e.Message;
+            }
+            return _response;
+        }
+
+        [HttpPut]
+        public ResponseDto Put([FromBody] CouponDto couponDto)
+        {
+            try
+            {
+                Coupon coupon = _mapper.Map<Coupon>(couponDto);
+                coupon.LastUpdatedOn = DateTime.Now;
+                _db.Coupons.Update(coupon);
+                _db.SaveChanges();
+                _response.Result = _mapper.Map<CouponDto>(coupon);
+                _response.Success = true;
+                _response.Message = "Updated sucesfully";
+                return _response;
+            }
+            catch (Exception e)
+            {
+                _response.Success = false;
+                _response.Message = "Error updating: " + e.Message;
+            }
+            return _response;
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public ResponseDto Delete(int id)
+        {
+            try
+            {
+                Coupon coupon = _db.Coupons.First(c => c.Id == id);
+                _db.Coupons.Remove(coupon);
+                _db.SaveChanges();
+                _response.Result = _mapper.Map<CouponDto>(coupon);
+                _response.Success = true;
+                _response.Message = "Removed sucesfully";
+                return _response;
+            }
+            catch (Exception e)
+            {
+                _response.Success = false;
+                _response.Message = "Error removing: " + e.Message;
             }
             return _response;
         }
