@@ -1,1 +1,7 @@
 1. All endpoints of the same API return the same class (ResponseDto).
+
+2. Consumers will create same class ResponseDto. As projects may not be in the same solution, as in this teaching case,
+is better to have the classes replicated, although it looks worse, it adapts to real world. Is important to keep models
+isolated to their corresponding project in Microservices architecture.
+
+
