@@ -5,3 +5,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>option.UseXXX("connection")
 
 PM> add-migration <name>					just creates the files needed
 PM> update-database							aplies changes from the files to the database
+
+
+For not having to run "update-database" every time, we'll be implementing in Program.cs a method that will
+apply pending migrations.
