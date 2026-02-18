@@ -4,7 +4,9 @@
     <File Path="Migrations.txt" />
     <File Path="NuGet packages explanation.txt" />
   </Folder>
-  <Folder Name="/FrontEnd/" />
+  <Folder Name="/FrontEnd/">
+    <Project Path="MsEShop.Web/MsEShop.Web.csproj" Id="8a36c130-3d4c-41fa-a68f-ebb4573f5812" />
+  </Folder>
   <Folder Name="/Gateway/" />
   <Folder Name="/Integration/" />
   <Folder Name="/Services/">
