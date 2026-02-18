@@ -1,0 +1,4 @@
+Automapper										for mapping DTOs to Models
+Microsoft.EntityFrameworkCore.Tools				for DDBB migrations and more
+Microsoft.AspNetCore.Authentication.JwtBearer	for API security
+Swashbuckle										for Swagger doc. Installed by default until Net8. For Net>8 it must be explicitly installed.

@@ -1,0 +1,5 @@
+In NuGet console:
+- select the correct project and execute
+
+PM> add-migration <name>					just creates the files needed
+PM> update-database							aplies changes from the files to the database
