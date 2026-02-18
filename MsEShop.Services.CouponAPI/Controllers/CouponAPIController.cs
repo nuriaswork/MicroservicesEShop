@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MsEShop.Services.CouponAPI.Data;
 using MsEShop.Services.CouponAPI.Models;
@@ -11,11 +12,13 @@ namespace MsEShop.Services.CouponAPI.Controllers
     public class CouponAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
+        private readonly IMapper _mapper;
         private ResponseDto _response;
 
-        public CouponAPIController(AppDbContext db)
+        public CouponAPIController(AppDbContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
             _response = new ResponseDto();
         }
 
@@ -25,7 +28,7 @@ namespace MsEShop.Services.CouponAPI.Controllers
             try
             {
                 IEnumerable<Coupon> coupons = _db.Coupons.ToList();
-                _response.Result = coupons;
+                _response.Result = _mapper.Map<IEnumerable<Coupon>>(coupons);
             }
             catch (Exception e)
             {
@@ -42,7 +45,7 @@ namespace MsEShop.Services.CouponAPI.Controllers
             try
             {
                 Coupon coupon = _db.Coupons.First(c => c.Id == id);
-                _response.Result = coupon;
+                _response.Result = _mapper.Map<CouponDto>(coupon);
             }
             catch (Exception e)
             {
