@@ -55,5 +55,20 @@ namespace MsEShop.Services.CouponAPI.Controllers
             return _response;
         }
 
+        [HttpGet]
+        [Route("GetByCode/{code}")]
+        public ResponseDto GetByCode(string code) {
+            try
+            {
+                Coupon coupon = _db.Coupons.First(c => c.Code == code);
+                _response.Result= _mapper.Map<CouponDto>(coupon);
+            }
+            catch (Exception e)
+            {
+                _response.Success= false;
+                _response.Message = e.Message;
+            }
+            return _response;
+        }
     }
 }
