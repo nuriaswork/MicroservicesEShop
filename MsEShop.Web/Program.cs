@@ -1,7 +1,20 @@
+using MsEShop.Web;
+using MsEShop.Web.Service;
+using MsEShop.Web.Service.IService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<ICouponService, CouponService>();
+
+builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IBaseService, BaseService>();
+
+Constants.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
 
 var app = builder.Build();
 
