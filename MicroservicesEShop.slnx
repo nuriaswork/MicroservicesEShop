@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/doc/">
+    <File Path="good_practices.txt" />
     <File Path="Migrations.txt" />
     <File Path="NuGet packages explanation.txt" />
   </Folder>

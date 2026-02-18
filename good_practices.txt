@@ -1,0 +1,1 @@
+1. All endpoints of the same API return the same class (ResponseDto).

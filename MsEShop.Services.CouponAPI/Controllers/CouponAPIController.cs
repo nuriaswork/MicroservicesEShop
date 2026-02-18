@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MsEShop.Services.CouponAPI.Data;
 using MsEShop.Services.CouponAPI.Models;
+using MsEShop.Services.CouponAPI.Models.Dto;
 
 namespace MsEShop.Services.CouponAPI.Controllers
 {
@@ -10,38 +11,45 @@ namespace MsEShop.Services.CouponAPI.Controllers
     public class CouponAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
+        private ResponseDto _response;
 
-        public CouponAPIController(AppDbContext db) => _db = db;
+        public CouponAPIController(AppDbContext db)
+        {
+            _db = db;
+            _response = new ResponseDto();
+        }
 
         [HttpGet]
-        public object GetAll()
+        public ResponseDto GetAll()
         {
             try
             {
                 IEnumerable<Coupon> coupons = _db.Coupons.ToList();
-                return coupons;
+                _response.Result = coupons;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                _response.Success = false;
+                _response.Message = e.Message;
             }
-            return null;
+            return _response;
         }
 
         [HttpGet]
         [Route("{id:int}")]
-        public object Get(int id)
+        public ResponseDto Get(int id)
         {
             try
             {
-                Coupon coupon = _db.Coupons.FirstOrDefault(c => c.Id == id);
-                return coupon;
+                Coupon coupon = _db.Coupons.First(c => c.Id == id);
+                _response.Result = coupon;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                _response.Success = false;
+                _response.Message = e.Message;
             }
-            return null;
+            return _response;
         }
 
     }
