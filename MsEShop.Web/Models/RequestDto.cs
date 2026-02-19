@@ -6,6 +6,6 @@ namespace MsEShop.Web.Models
     {
         public ApiType ApiType { get; set; }
         public string Uri { get; set; }
-        public string Data { get; set; }
+        public object Data { get; set; }
     }
 }

@@ -4,4 +4,8 @@
 is better to have the classes replicated, although it looks worse, it adapts to real world. Is important to keep models
 isolated to their corresponding project in Microservices architecture.
 
+3. Use HSTS (HTTP Strict Transport Security) in production for tell browsers to only user HTTPS. Prevents protocol downgrade 
+and some man-in-the-middle attacks). How it works: server sends the Strict-Transport-Security response header with a 
+max-age. While max-age is in effect the browser will refuse HTTP for the domain. Optional directives: includeSubDomains, preload.
+app.UseHsts();
 

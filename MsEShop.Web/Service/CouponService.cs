@@ -5,6 +5,7 @@ namespace MsEShop.Web.Service
 {
     public class CouponService : ICouponService
     {
+        private const string ApiControllerName = "/api/CouponAPI";
         private readonly IBaseService _baseService;
 
         public CouponService(IBaseService baseService)
@@ -12,34 +13,61 @@ namespace MsEShop.Web.Service
             _baseService = baseService;
         }
 
-        public Task<ResponseDto> CreateCouponAsync(CouponDto couponDto)
+        public async Task<ResponseDto> CreateCouponAsync(CouponDto couponDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.CouponAPIBase + ApiControllerName,
+                ApiType = Enums.ApiType.POST,
+                Data = couponDto
+            });
         }
 
-        public Task<ResponseDto> DeleteCouponAsync(int id)
+        public async Task<ResponseDto> DeleteCouponAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.CouponAPIBase + ApiControllerName + $"/{id}",
+                ApiType = Enums.ApiType.DELETE
+            });
         }
 
-        public Task<ResponseDto> GetAllCouponsAsync()
+        public async Task<ResponseDto> GetAllCouponsAsync()
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.CouponAPIBase + ApiControllerName,
+                ApiType = Enums.ApiType.GET
+            });
         }
 
-        public Task<ResponseDto> GetCouponAsync(string code)
+        public async Task<ResponseDto> GetCouponAsync(string code)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.CouponAPIBase + ApiControllerName + $"/GetByCode/{code}",
+                ApiType = Enums.ApiType.GET
+            });
         }
 
-        public Task<ResponseDto> GetCouponByIdAsync(int id)
+        public async Task<ResponseDto> GetCouponByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.CouponAPIBase + ApiControllerName + $"/{id}",
+                ApiType = Enums.ApiType.GET
+            });
         }
 
-        public Task<ResponseDto> UpdateCouponAsync(CouponDto couponDto)
+        public async Task<ResponseDto> UpdateCouponAsync(CouponDto couponDto)
         {
-            throw new NotImplementedException();
+
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.CouponAPIBase + ApiControllerName,
+                ApiType = Enums.ApiType.PUT,
+                Data = couponDto
+            });
         }
     }
 }
