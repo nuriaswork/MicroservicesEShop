@@ -9,3 +9,5 @@ and some man-in-the-middle attacks). How it works: server sends the Strict-Trans
 max-age. While max-age is in effect the browser will refuse HTTP for the domain. Optional directives: includeSubDomains, preload.
 app.UseHsts();
 
+4. Set a fixed route for API controllers, so the name of the controller can change but the route is the same, so the services that call the 
+API do not have to be updated: [Route("api/coupon")]

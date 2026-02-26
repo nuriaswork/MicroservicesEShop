@@ -5,7 +5,7 @@ namespace MsEShop.Web.Service
 {
     public class CouponService : ICouponService
     {
-        private const string ApiControllerName = "/api/CouponAPI";
+        private const string ApiControllerName = "/api/coupon";
         private readonly IBaseService _baseService;
 
         public CouponService(IBaseService baseService)
