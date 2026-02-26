@@ -11,3 +11,7 @@ app.UseHsts();
 
 4. Set a fixed route for API controllers, so the name of the controller can change but the route is the same, so the services that call the 
 API do not have to be updated: [Route("api/coupon")]
+
+5. For frontend validations, it's already included <WebProject>\Views\Shared\_ValidationScriptsPartial.cshtml with predefined jQuery scripts. 
+Add @section Scripts { <partial name="_ValidationScriptsPartial" /> } to the View and use it with asp-for & asp-validation-for.
+

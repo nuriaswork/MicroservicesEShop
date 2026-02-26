@@ -27,5 +27,27 @@ namespace MsEShop.Web.Controllers
 
             return View(list);
         }
+
+        public async Task<IActionResult> CouponCreate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CouponCreate(CouponDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                ResponseDto response = await _couponService.CreateCouponAsync(model);
+
+                if (response != null && response.Success)
+                {
+                    return RedirectToAction(nameof(CouponIndex));
+                }
+
+            }
+            return View(model);
+        }
+
     }
 }
