@@ -10,6 +10,7 @@
   <Folder Name="/Gateway/" />
   <Folder Name="/Integration/" />
   <Folder Name="/Services/">
+    <Project Path="MsEShop.Services.AuthAPI/MsEShop.Services.AuthAPI.csproj" Id="88a08e66-5b41-435f-92da-191f467147cc" />
     <Project Path="MsEShop.Services.CouponAPI/MsEShop.Services.CouponAPI.csproj" />
   </Folder>
 </Solution>
