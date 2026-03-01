@@ -49,5 +49,31 @@ namespace MsEShop.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> CouponDelete(int couponId)
+        {
+            ResponseDto responseDto = await _couponService.GetCouponByIdAsync(couponId);
+
+            if (responseDto != null && responseDto.Success)
+            {
+                CouponDto couponDto = JsonConvert.DeserializeObject<CouponDto>(responseDto.Result.ToString());
+                return View(couponDto);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CouponDelete(CouponDto couponDto)
+        {
+            ResponseDto responseDto = await _couponService.DeleteCouponAsync(couponDto.Id);
+
+            if (responseDto != null && responseDto.Success)
+            {
+                return RedirectToAction(nameof(CouponIndex));
+            }
+            return View(couponDto);
+        }
+
+        //We are not implementing Update functionallity
     }
 }
