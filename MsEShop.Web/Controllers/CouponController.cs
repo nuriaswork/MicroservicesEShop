@@ -24,6 +24,10 @@ namespace MsEShop.Web.Controllers
             {
                 list = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(response.Result));
             }
+            else
+            {
+                TempData["error"] = response.Message;
+            }
 
             return View(list);
         }
@@ -42,7 +46,12 @@ namespace MsEShop.Web.Controllers
 
                 if (response != null && response.Success)
                 {
+                    TempData["success"] = "Coupon created!!";
                     return RedirectToAction(nameof(CouponIndex));
+                }
+                else
+                {
+                    TempData["error"] = response.Message;
                 }
 
             }
@@ -58,6 +67,10 @@ namespace MsEShop.Web.Controllers
                 CouponDto couponDto = JsonConvert.DeserializeObject<CouponDto>(responseDto.Result.ToString());
                 return View(couponDto);
             }
+            else
+            {
+                TempData["error"] = responseDto.Message;
+            }
 
             return NotFound();
         }
@@ -69,8 +82,14 @@ namespace MsEShop.Web.Controllers
 
             if (responseDto != null && responseDto.Success)
             {
+                TempData["success"] = "Coupon deleted!!";
                 return RedirectToAction(nameof(CouponIndex));
             }
+            else
+            {
+                TempData["error"] = responseDto.Message;
+            }
+
             return View(couponDto);
         }
 
