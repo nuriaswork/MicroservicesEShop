@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MsEShop.Services.AuthAPI.Models.Dto;
+using MsEShop.Services.AuthAPI.Services.Interfaces;
 
 namespace MsEShop.Services.AuthAPI.Controllers
 {
@@ -7,10 +8,26 @@ namespace MsEShop.Services.AuthAPI.Controllers
     [ApiController]
     public class AuthAPIController : ControllerBase
     {
-        [HttpPost("register")]
-        public async Task<IActionResult> Register()
+        private IAuthService _authService;
+        protected ResponseDto _response;
+
+        public AuthAPIController(IAuthService authService)
         {
-            return Ok();
+            _authService = authService;
+            _response = new() { Success = true };
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
+        {
+            var response = await _authService.Register(model);
+            if (!string.IsNullOrEmpty(response))
+            {
+                _response.Success = false;
+                _response.Result = response;
+                return BadRequest(_response);
+            }
+            return Ok(_response);
         }
 
         [HttpPost("login")]
