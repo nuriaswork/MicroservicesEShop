@@ -1,0 +1,10 @@
+﻿using MsEShop.Services.AuthAPI.Models;
+
+namespace MsEShop.Services.AuthAPI.Services.Interfaces
+{
+    public interface IJwtTokenGenerator
+    {
+        string GenerateToken(ApplicationUser applicationUser);
+
+    }
+}

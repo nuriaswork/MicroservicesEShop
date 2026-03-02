@@ -1,13 +1,17 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MsEShop.Services.AuthAPI.Data;
 using MsEShop.Services.AuthAPI.Models;
+using MsEShop.Services.AuthAPI.Models.Dto;
+using MsEShop.Services.AuthAPI.Services;
+using MsEShop.Services.AuthAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//JWT options
+//JWT options read from -appsettings.json
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 
 //EF and DotNetIdentity
@@ -16,6 +20,20 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseMySQL(builder.Configuration.GetConnectionString("MySQLConnection"));
 });
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+//Dependency injection
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+//Automapper:
+IMapper mapper = new MapperConfiguration(config =>
+{
+    config.CreateMap<ApplicationUser, UserDto>();
+    config.CreateMap<UserDto, ApplicationUser>();
+}
+).CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //for use Automapper with dependency injection
 
 
 builder.Services.AddControllers();

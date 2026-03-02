@@ -4,27 +4,47 @@ using MsEShop.Services.AuthAPI.Data;
 using MsEShop.Services.AuthAPI.Models;
 using MsEShop.Services.AuthAPI.Models.Dto;
 using MsEShop.Services.AuthAPI.Services.Interfaces;
+using System.Diagnostics.Eventing.Reader;
 
 namespace MsEShop.Services.AuthAPI.Services
 {
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _db;
+        private IMapper _mapper;
 
         //These 2 are automatically injected by .Net Identity, so we don't need to configure in Program.cs
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthService(AppDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+
+        public AuthService(AppDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IJwtTokenGenerator jwtTokenGenerator)
         {
             _db = db;
             _userManager = userManager;
             _roleManager = roleManager;
+            _mapper = mapper;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public Task<LoginResponseDto> Login(LoginRequestDto login)
+        public async Task<LoginResponseDto> Login(LoginRequestDto login)
         {
-            throw new NotImplementedException();
+            LoginResponseDto response = new() { User = null, Token = "" };
+
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == login.UserName.ToLower());
+            if (user == null)
+                return response;
+
+            bool isValidPassword = await _userManager.CheckPasswordAsync(user, login.Password);
+            if (!isValidPassword)
+                return response;
+
+            response.User = _mapper.Map<UserDto>(user);
+            response.Token = _jwtTokenGenerator.GenerateToken(user); ;
+
+            return response;
+
         }
 
         public async Task<string> Register(RegistrationRequestDto registration)

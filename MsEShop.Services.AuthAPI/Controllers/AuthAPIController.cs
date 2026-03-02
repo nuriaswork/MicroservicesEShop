@@ -31,9 +31,20 @@ namespace MsEShop.Services.AuthAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            return Ok();
+            LoginResponseDto result = await _authService.Login(model);
+            if (result.User == null)
+            {
+                _response.Success = false;
+                _response.Result = "Username or Password is incorrect.";
+                return BadRequest(_response);
+            }
+            else
+            {
+                _response.Result = result;
+                return Ok(_response);
+            }
         }
     }
 }
