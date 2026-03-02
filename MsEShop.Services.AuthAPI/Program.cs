@@ -7,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//JWT options
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+
 //EF and DotNetIdentity
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
