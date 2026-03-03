@@ -46,5 +46,19 @@ namespace MsEShop.Services.AuthAPI.Controllers
                 return Ok(_response);
             }
         }
+
+
+        [HttpPost("AssignRole")]
+        public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDto model)
+        {
+            var result = await _authService.AssignRole(model.Email, model.Role.ToUpper());
+            if (!result)
+            {
+                _response.Success = false;
+                _response.Result = "Error assigning role to user.";
+                return BadRequest(_response);
+            }
+            return Ok(_response);
+        }
     }
 }
