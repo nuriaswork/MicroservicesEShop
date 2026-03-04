@@ -1,0 +1,46 @@
+﻿using MsEShop.Web.Models;
+using MsEShop.Web.Service.IService;
+
+namespace MsEShop.Web.Service
+{
+    public class AuthService : IAuthService
+    {
+        private const string ApiControllerName = "/api/auth";
+        private readonly IBaseService _baseService;
+
+        public AuthService(IBaseService baseService)
+        {
+            _baseService = baseService;
+        }
+
+        public async Task<ResponseDto> AssignRoleAsync(RegistrationRequestDto registrationRequestDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.AuthAPIBase + ApiControllerName + "/AssignRole",
+                ApiType = Enums.ApiType.POST,
+                Data = registrationRequestDto
+            });
+        }
+
+        public async Task<ResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.AuthAPIBase + ApiControllerName + "/login",
+                ApiType = Enums.ApiType.POST,
+                Data = loginRequestDto
+            });
+        }
+
+        public async Task<ResponseDto> RegisterAsync(RegistrationRequestDto registrationRequestDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = Constants.AuthAPIBase + ApiControllerName + "/register",
+                ApiType = Enums.ApiType.POST,
+                Data = registrationRequestDto
+            });
+        }
+    }
+}
