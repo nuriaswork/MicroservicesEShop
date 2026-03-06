@@ -37,7 +37,7 @@ namespace MsEShop.Services.AuthAPI.Services
         {
             LoginResponseDto response = new() { User = null, Token = "" };
 
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == login.UserName.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.Equals(login.UserName, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
                 return response;
 
