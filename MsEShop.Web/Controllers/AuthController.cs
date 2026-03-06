@@ -1,25 +1,54 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MsEShop.Web.Constants;
 using MsEShop.Web.Models;
 using MsEShop.Web.Service.IService;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace MsEShop.Web.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly ITokenProvider _tokenProvider;
+        private readonly IJwtTokenLoader _jwtTokenLoader;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider, IJwtTokenLoader jwtTokenLoader)
         {
             _authService = authService;
+            _tokenProvider = tokenProvider;
+            _jwtTokenLoader = jwtTokenLoader;
         }
 
         [HttpGet]
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequestDto model)
+        {
+            ResponseDto responseDto = await _authService.LoginAsync(model);
+            if (responseDto != null && responseDto.Success)
+            {
+                LoginResponseDto loginResponse = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(responseDto.Result));
+                
+                await SignInUer(loginResponse.Token);
+
+                _tokenProvider.SetToken(loginResponse.Token);
+                
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                //as we have asp-validation-summary component in Login view, we can use this:
+                ModelState.AddModelError("CustomError", responseDto.Message);
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -75,6 +104,13 @@ namespace MsEShop.Web.Controllers
         public IActionResult Logout()
         {
             return View();
+        }
+
+        private async Task SignInUer(string token)
+        {
+            //this logic is for User.Identity.IsAuthenticated to work: we need to inform .NET Identity how a user isAuthenticated
+            var principal = new ClaimsPrincipal(_jwtTokenLoader.ReadClaimsFromJwtToken(token));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
 
     }
