@@ -21,7 +21,7 @@ namespace MsEShop.Web.Service
                 Uri = ApisUri.CouponAPIBase + ApiControllerName,
                 ApiType = Enums.ApiType.POST,
                 Data = couponDto
-            });
+            }, true);
         }
 
         public async Task<ResponseDto> DeleteCouponAsync(int id)
@@ -30,7 +30,7 @@ namespace MsEShop.Web.Service
             {
                 Uri = ApisUri.CouponAPIBase + ApiControllerName + $"/{id}",
                 ApiType = Enums.ApiType.DELETE
-            });
+            }, true);
         }
 
         public async Task<ResponseDto> GetAllCouponsAsync()
@@ -39,7 +39,7 @@ namespace MsEShop.Web.Service
             {
                 Uri = ApisUri.CouponAPIBase + ApiControllerName,
                 ApiType = Enums.ApiType.GET
-            });
+            }, true);
         }
 
         public async Task<ResponseDto> GetCouponAsync(string code)
@@ -48,7 +48,7 @@ namespace MsEShop.Web.Service
             {
                 Uri = ApisUri.CouponAPIBase + ApiControllerName + $"/GetByCode/{code}",
                 ApiType = Enums.ApiType.GET
-            });
+            }, true);
         }
 
         public async Task<ResponseDto> GetCouponByIdAsync(int id)
@@ -57,7 +57,7 @@ namespace MsEShop.Web.Service
             {
                 Uri = ApisUri.CouponAPIBase + ApiControllerName + $"/{id}",
                 ApiType = Enums.ApiType.GET
-            });
+            }, true);
         }
 
         public async Task<ResponseDto> UpdateCouponAsync(CouponDto couponDto)
@@ -68,7 +68,7 @@ namespace MsEShop.Web.Service
                 Uri = ApisUri.CouponAPIBase + ApiControllerName,
                 ApiType = Enums.ApiType.PUT,
                 Data = couponDto
-            });
+            }, true);
         }
     }
 }

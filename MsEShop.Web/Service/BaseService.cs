@@ -10,16 +10,25 @@ namespace MsEShop.Web.Service
     {
         private const string MediaType = "application/json";
         private readonly IHttpClientFactory _httpClientFactory;
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly ITokenProvider _tokenProvider;
+        public BaseService(IHttpClientFactory httpClientFactory, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenProvider = tokenProvider;
         }
-        public async Task<ResponseDto> SendAsync(RequestDto requestDto)
+        public async Task<ResponseDto> SendAsync(RequestDto requestDto, bool withBearer)
         {
             try
             {
                 HttpRequestMessage request = new();
                 request.Headers.Add("Accept", MediaType);
+
+                if (withBearer)
+                {
+                    var token = _tokenProvider.GetToken();
+                    request.Headers.Add("Authorization", $"Bearer {token}");
+                }
+
                 request.RequestUri = new Uri(requestDto.Uri);
                 if (requestDto.Data != null)
                 {

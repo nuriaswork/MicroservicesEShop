@@ -21,7 +21,7 @@ namespace MsEShop.Web.Service
                 Uri = ApisUri.AuthAPIBase + ApiControllerName + "/AssignRole",
                 ApiType = Enums.ApiType.POST,
                 Data = registrationRequestDto
-            });
+            }, true);
         }
 
         public async Task<ResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
@@ -31,7 +31,7 @@ namespace MsEShop.Web.Service
                 Uri = ApisUri.AuthAPIBase + ApiControllerName + "/login",
                 ApiType = Enums.ApiType.POST,
                 Data = loginRequestDto
-            });
+            }, false);
         }
 
         public async Task<ResponseDto> RegisterAsync(RegistrationRequestDto registrationRequestDto)
@@ -41,7 +41,7 @@ namespace MsEShop.Web.Service
                 Uri = ApisUri.AuthAPIBase + ApiControllerName + "/register",
                 ApiType = Enums.ApiType.POST,
                 Data = registrationRequestDto
-            });
+            }, false);
         }
     }
 }
