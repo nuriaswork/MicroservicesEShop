@@ -47,6 +47,7 @@ namespace MsEShop.Web.Controllers
             {
                 //as we have asp-validation-summary component in Login view, we can use this:
                 ModelState.AddModelError("CustomError", responseDto.Message);
+                TempData["error"] = responseDto.Message;
                 return View(model);
             }
         }

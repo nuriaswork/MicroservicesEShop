@@ -5,7 +5,7 @@
         <div class="row text-center p-3">
             <h1>Login</h1>
         </div>
-        <div class="row text-center">
+        <div class="row">
             <div asp-validation-summary="All" class="text-danger">
             </div>
         </div>
@@ -22,3 +22,7 @@
         </div>
     </div>
 </form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
