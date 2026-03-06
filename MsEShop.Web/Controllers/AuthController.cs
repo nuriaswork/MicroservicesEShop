@@ -36,11 +36,11 @@ namespace MsEShop.Web.Controllers
             if (responseDto != null && responseDto.Success)
             {
                 LoginResponseDto loginResponse = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(responseDto.Result));
-                
+
                 await SignInUer(loginResponse.Token);
 
                 _tokenProvider.SetToken(loginResponse.Token);
-                
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -101,9 +101,11 @@ namespace MsEShop.Web.Controllers
 
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            _tokenProvider.ClearToken();
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task SignInUer(string token)
