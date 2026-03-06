@@ -25,6 +25,10 @@ namespace MsEShop.Web.Service
             identity.AddClaim(new Claim(ClaimTypes.Name,
                 jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email).Value));
 
+            //and other one for Roles. This way we can annotate functions in controllers so just some roles have authorization: [Authorize(roles=...)]
+            identity.AddClaim(new Claim(ClaimTypes.Role,
+                jwt.Claims.FirstOrDefault(c => c.Type == "role").Value));
+
             return identity;
         }
     }

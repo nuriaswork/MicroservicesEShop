@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MsEShop.Services.AuthAPI.Models;
+using MsEShop.Services.AuthAPI.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace MsEShop.Services.AuthAPI.Services.Interfaces
+namespace MsEShop.Services.AuthAPI.Services
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
@@ -16,7 +17,7 @@ namespace MsEShop.Services.AuthAPI.Services.Interfaces
             _jwtOptions = jwtOptions.Value;
         }
 
-        public string GenerateToken(ApplicationUser applicationUser)
+        public string GenerateToken(ApplicationUser applicationUser, IEnumerable<string> roles)
         {
             var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
 
@@ -28,6 +29,9 @@ namespace MsEShop.Services.AuthAPI.Services.Interfaces
                 new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Id),
                 new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName)
             };
+
+            //with ClaimTypes.Role we instruct .NET Identity what are our roles, so we can use UserManager.GetRoles() and all Roles functions
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

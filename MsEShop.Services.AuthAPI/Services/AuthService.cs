@@ -46,7 +46,8 @@ namespace MsEShop.Services.AuthAPI.Services
                 return response;
 
             response.User = _mapper.Map<UserDto>(user);
-            response.Token = _jwtTokenGenerator.GenerateToken(user); ;
+            var roles = await _userManager.GetRolesAsync(user);
+            response.Token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             return response;
 
