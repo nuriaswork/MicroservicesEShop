@@ -1,4 +1,5 @@
-﻿using MsEShop.Web.Models;
+﻿using MsEShop.Web.Constants;
+using MsEShop.Web.Models;
 using MsEShop.Web.Service.IService;
 
 namespace MsEShop.Web.Service
@@ -17,7 +18,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.CouponAPIBase + ApiControllerName,
+                Uri = ApisUri.CouponAPIBase + ApiControllerName,
                 ApiType = Enums.ApiType.POST,
                 Data = couponDto
             });
@@ -27,7 +28,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.CouponAPIBase + ApiControllerName + $"/{id}",
+                Uri = ApisUri.CouponAPIBase + ApiControllerName + $"/{id}",
                 ApiType = Enums.ApiType.DELETE
             });
         }
@@ -36,7 +37,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.CouponAPIBase + ApiControllerName,
+                Uri = ApisUri.CouponAPIBase + ApiControllerName,
                 ApiType = Enums.ApiType.GET
             });
         }
@@ -45,7 +46,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.CouponAPIBase + ApiControllerName + $"/GetByCode/{code}",
+                Uri = ApisUri.CouponAPIBase + ApiControllerName + $"/GetByCode/{code}",
                 ApiType = Enums.ApiType.GET
             });
         }
@@ -54,7 +55,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.CouponAPIBase + ApiControllerName + $"/{id}",
+                Uri = ApisUri.CouponAPIBase + ApiControllerName + $"/{id}",
                 ApiType = Enums.ApiType.GET
             });
         }
@@ -64,7 +65,7 @@ namespace MsEShop.Web.Service
 
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.CouponAPIBase + ApiControllerName,
+                Uri = ApisUri.CouponAPIBase + ApiControllerName,
                 ApiType = Enums.ApiType.PUT,
                 Data = couponDto
             });

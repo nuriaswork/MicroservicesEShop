@@ -24,7 +24,7 @@ namespace MsEShop.Services.AuthAPI.Controllers
             if (!string.IsNullOrEmpty(response))
             {
                 _response.Success = false;
-                _response.Result = response;
+                _response.Message = response;
                 return BadRequest(_response);
             }
             return Ok(_response);
@@ -37,7 +37,7 @@ namespace MsEShop.Services.AuthAPI.Controllers
             if (result.User == null)
             {
                 _response.Success = false;
-                _response.Result = "Username or Password is incorrect.";
+                _response.Message = "Username or Password is incorrect.";
                 return BadRequest(_response);
             }
             else
@@ -48,6 +48,10 @@ namespace MsEShop.Services.AuthAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Assigns role to user.
+        /// </summary>
+        /// <returns>True if the role was assigned to user. False otherwise.</returns>
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDto model)
         {
@@ -55,7 +59,7 @@ namespace MsEShop.Services.AuthAPI.Controllers
             if (!result)
             {
                 _response.Success = false;
-                _response.Result = "Error assigning role to user.";
+                _response.Message = "Error assigning role to user.";
                 return BadRequest(_response);
             }
             return Ok(_response);

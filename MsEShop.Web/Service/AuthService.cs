@@ -1,4 +1,5 @@
-﻿using MsEShop.Web.Models;
+﻿using MsEShop.Web.Constants;
+using MsEShop.Web.Models;
 using MsEShop.Web.Service.IService;
 
 namespace MsEShop.Web.Service
@@ -17,7 +18,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.AuthAPIBase + ApiControllerName + "/AssignRole",
+                Uri = ApisUri.AuthAPIBase + ApiControllerName + "/AssignRole",
                 ApiType = Enums.ApiType.POST,
                 Data = registrationRequestDto
             });
@@ -27,7 +28,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.AuthAPIBase + ApiControllerName + "/login",
+                Uri = ApisUri.AuthAPIBase + ApiControllerName + "/login",
                 ApiType = Enums.ApiType.POST,
                 Data = loginRequestDto
             });
@@ -37,7 +38,7 @@ namespace MsEShop.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                Uri = Constants.AuthAPIBase + ApiControllerName + "/register",
+                Uri = ApisUri.AuthAPIBase + ApiControllerName + "/register",
                 ApiType = Enums.ApiType.POST,
                 Data = registrationRequestDto
             });

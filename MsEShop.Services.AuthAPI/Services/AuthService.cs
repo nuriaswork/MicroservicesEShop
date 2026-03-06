@@ -28,6 +28,11 @@ namespace MsEShop.Services.AuthAPI.Services
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
+        /// <summary>
+        /// Try to Login the user with the password provided.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns>User and Token</returns>
         public async Task<LoginResponseDto> Login(LoginRequestDto login)
         {
             LoginResponseDto response = new() { User = null, Token = "" };
@@ -47,9 +52,13 @@ namespace MsEShop.Services.AuthAPI.Services
 
         }
 
+        /// <summary>
+        /// Creates a user. 
+        /// </summary>
+        /// <param name="registration"></param>
+        /// <returns>Returns "" if the user was created. Returns the error message if couldn't create the user.</returns>
         public async Task<string> Register(RegistrationRequestDto registration)
         {
-
             try
             {
                 ApplicationUser user = new()
@@ -84,9 +93,15 @@ namespace MsEShop.Services.AuthAPI.Services
 
         }
 
+        /// <summary>
+        /// Assigns role to user.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="roleName"></param>
+        /// <returns>True if the role was assigned to user. False otherwise.</returns>
         public async Task<bool> AssignRole(string email, string roleName)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
             if (user == null)
                 return false;
 

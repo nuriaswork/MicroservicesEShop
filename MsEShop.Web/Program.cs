@@ -1,4 +1,4 @@
-using MsEShop.Web;
+using MsEShop.Web.Constants;
 using MsEShop.Web.Service;
 using MsEShop.Web.Service.IService;
 
@@ -16,8 +16,8 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 
-Constants.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
-Constants.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+ApisUri.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
+ApisUri.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
 
 var app = builder.Build();
 
