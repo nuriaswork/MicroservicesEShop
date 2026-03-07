@@ -1,0 +1,11 @@
+
+	ASP NET Core WEB API with Entity Framework Cheetsheet
+
+1.- Create ASP NET Core Web API project
+2.- Create Model and Dto objects (in Model folder).
+3.- Create Data folder with AppDbContext.cs. Create DbSet<> and seed OnModelCreating if necessary.
+4.- Set up database connection string and config in program.cs
+5.- Create tables with a migration
+6.- Setup Automapper
+7.- CRUD API functionality
+8.- Setup Authentication and Authorization using roles if needed
