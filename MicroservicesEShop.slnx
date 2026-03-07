@@ -1,9 +1,11 @@
 <Solution>
   <Folder Name="/doc/">
+    <File Path="AspNetCore Web API Cheetsheet.txt" />
     <File Path="good_practices.txt" />
     <File Path="Microservices app Architecture.png" />
     <File Path="Migrations.txt" />
     <File Path="NuGet packages explanation.txt" />
+    <File Path="Tips.txt" />
   </Folder>
   <Folder Name="/FrontEnd/">
     <Project Path="MsEShop.Web/MsEShop.Web.csproj" Id="8a36c130-3d4c-41fa-a68f-ebb4573f5812" />
@@ -13,5 +15,6 @@
   <Folder Name="/Services/">
     <Project Path="MsEShop.Services.AuthAPI/MsEShop.Services.AuthAPI.csproj" Id="88a08e66-5b41-435f-92da-191f467147cc" />
     <Project Path="MsEShop.Services.CouponAPI/MsEShop.Services.CouponAPI.csproj" />
+    <Project Path="MsEShop.Services.ProductAPI/MsEShop.Services.ProductAPI.csproj" Id="108bdfe0-d6b2-42c5-8312-dc67fafbe121" />
   </Folder>
 </Solution>
