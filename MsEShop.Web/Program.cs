@@ -24,15 +24,18 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICouponService, CouponService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
 
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ITokenProvider, TokenProviderService>();
 builder.Services.AddScoped<IJwtTokenLoader, JwtTokenLoader>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 ApisUri.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
 ApisUri.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+ApisUri.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 
 var app = builder.Build();
 
