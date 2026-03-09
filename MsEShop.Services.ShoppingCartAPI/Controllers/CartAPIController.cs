@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MsEShop.Services.ShoppingCartAPI.Data;
 using MsEShop.Services.ShoppingCartAPI.Models;
 using MsEShop.Services.ShoppingCartAPI.Models.Dto;
+using MsEShop.Services.ShoppingCartAPI.Services.IServices;
 using System.Reflection.PortableExecutable;
 
 namespace MsEShop.Services.ShoppingCartAPI.Controllers
@@ -16,12 +17,14 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
         private ResponseDto _responseDto;
         private readonly IMapper _mapper;
         private readonly AppDbContext _db;
+        private readonly IProductService _productService;
 
-        public CartAPIController(IMapper mapper, AppDbContext db)
+        public CartAPIController(IMapper mapper, AppDbContext db, IProductService productService)
         {
             _mapper = mapper;
             _db = db;
             _responseDto = new ResponseDto() { Success = true };
+            _productService = productService;
         }
 
         [HttpGet("GetCart/{userId}")]
@@ -36,11 +39,13 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
                 cartDto.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(
                     _db.CartDetails.Where(cd => cd.CartHeaderId == cartDto.CartHeader.CartHeaderId));
 
-                //TODO: we need Product.Price
-                //foreach (var item in cartDto.CartDetails)
-                //{
-                //    cartDto.CartHeader.CartTotal += item.Count * item.Product.Price;
-                //}
+                IEnumerable<ProductDto> products = await _productService.GetProductsAsync();
+
+                foreach (var item in cartDto.CartDetails)
+                {
+                    item.productDto = products.First(p => p.ProductId == item.ProductId);
+                    cartDto.CartHeader.CartTotal += item.Count * item.productDto.Price;
+                }
 
                 _responseDto.Result = cartDto;
 

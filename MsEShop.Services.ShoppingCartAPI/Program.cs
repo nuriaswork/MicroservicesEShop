@@ -6,6 +6,8 @@ using Microsoft.OpenApi;
 using MsEShop.Services.ShoppingCartAPI.Data;
 using MsEShop.Services.ShoppingCartAPI.Models;
 using MsEShop.Services.ShoppingCartAPI.Models.Dto;
+using MsEShop.Services.ShoppingCartAPI.Services;
+using MsEShop.Services.ShoppingCartAPI.Services.IServices;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,11 @@ IMapper mapper = new MapperConfiguration(config =>
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //for use Automapper with dependency injection
 
+//We are implementing API comunication differently than from Web project, so we learn other ways to do it
+builder.Services.AddHttpClient("ProductHttpClient", 
+    client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
