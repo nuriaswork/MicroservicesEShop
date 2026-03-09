@@ -1,0 +1,6 @@
+@MsEShop.Services.ShoppingCartAPI_HostAddress = http://localhost:5228
+
+GET {{MsEShop.Services.ShoppingCartAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
