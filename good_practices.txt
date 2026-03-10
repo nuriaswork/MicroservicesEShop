@@ -15,3 +15,6 @@ API do not have to be updated: [Route("api/coupon")]
 5. For frontend validations, it's already included <WebProject>\Views\Shared\_ValidationScriptsPartial.cshtml with predefined jQuery scripts. 
 Add @section Scripts { <partial name="_ValidationScriptsPartial" /> } to the View and use it with asp-for & asp-validation-for.
 
+6. In Web Project controllers, do not mix controllers in a View. For example, to add product to cart in Home/ProductDetails.cshtml, we DO NOT call to CartController actions,
+BUT we create a NEW action in HomeController, injecting the CartService ==> decoupling!!
+

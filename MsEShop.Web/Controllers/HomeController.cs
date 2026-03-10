@@ -4,6 +4,7 @@ using MsEShop.Web.Models;
 using MsEShop.Web.Service.IService;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MsEShop.Web.Controllers
 {
@@ -11,11 +12,13 @@ namespace MsEShop.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
+        private readonly ICartService _cartService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService)
+        public HomeController(ILogger<HomeController> logger, IProductService productService, ICartService cartService)
         {
             _logger = logger;
             _productService = productService;
+            _cartService = cartService;
         }
 
         public async Task<IActionResult> Index()
@@ -50,6 +53,38 @@ namespace MsEShop.Web.Controllers
                 TempData["error"] = response.Message;
             }
             return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ActionName("ProductDetails")]
+        public async Task<IActionResult> ProductDetails(ProductDto productDto)
+        {
+            CartRequestDto cartRequestDto = new()
+            {
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value
+                }
+            };
+            CartDetailsDto cartDetailsDto = new()
+            {
+                ProductId = productDto.ProductId,
+                Count = productDto.Count
+            };
+            cartRequestDto.CartDetails = cartDetailsDto;
+
+            ResponseDto response = await _cartService.UpsertCartAsync(cartRequestDto);
+            if (response != null && response.Success)
+            {
+                TempData["success"] = "Product updated in shopping cart.";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(productDto);
         }
 
         public IActionResult Privacy()
