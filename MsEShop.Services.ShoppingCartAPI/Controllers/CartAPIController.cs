@@ -71,7 +71,7 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("CartUpsert")]
-        public async Task<ResponseDto> CartUpsert(CartRequestDto cartDto)
+        public async Task<ResponseDto> CartUpsert([FromBody] CartRequestDto cartDto)
         {
             try
             {
