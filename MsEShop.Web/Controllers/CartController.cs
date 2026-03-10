@@ -27,7 +27,7 @@ namespace MsEShop.Web.Controllers
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedUser()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Name)?.Value;
+            var userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
             var cartResponse = await _cartService.GetCartByUserIdAsync(userId);
             if (cartResponse != null && cartResponse.Success)
             {
