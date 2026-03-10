@@ -32,8 +32,11 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //for u
 //We are implementing API comunication differently than from Web project, so we learn other ways to do it
 builder.Services.AddHttpClient("ProductHttpClient", 
     client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+builder.Services.AddHttpClient("CoupontHttpClient",
+    client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
