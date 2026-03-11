@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace MsEShop.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseLoggedController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
@@ -64,7 +64,7 @@ namespace MsEShop.Web.Controllers
             {
                 CartHeader = new CartHeaderDto()
                 {
-                    UserId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value
+                    UserId = LoggedUserId
                 }
             };
             CartDetailsDto cartDetailsDto = new()
