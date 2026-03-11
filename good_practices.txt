@@ -16,5 +16,9 @@ API do not have to be updated: [Route("api/coupon")]
 Add @section Scripts { <partial name="_ValidationScriptsPartial" /> } to the View and use it with asp-for & asp-validation-for.
 
 6. In Web Project controllers, do not mix controllers in a View. For example, to add product to cart in Home/ProductDetails.cshtml, we DO NOT call to CartController actions,
-BUT we create a NEW action in HomeController, injecting the CartService ==> decoupling!!
+BUT we create a NEW action in HomeController, injecting the CartService ==> decoupling!! 
+NOTE: BUT sometimes it's ok, like "Continue Shoppig" link from CartIndex.cshtml to HomeController/Index action.
+It will depend if it's a submit button (that goes to the <form> controller) or an ancor ( <a asp-controller="Home" asp-action="Index" >)
+
+7. Use @Html.Raw() for text fields that include HTML formating.
 

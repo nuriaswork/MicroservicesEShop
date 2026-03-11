@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
 {
     [Route("api/cart")]
     [ApiController]
+    [Authorize]
     public class CartAPIController : ControllerBase
     {
         private ResponseDto _responseDto;
@@ -51,10 +53,15 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
                 if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
                 {
                     var couponDto = await _couponService.GetCouponAsync(cartDto.CartHeader.CouponCode);
-                    if (couponDto != null && cartDto.CartHeader.CartTotal >= couponDto.MinAmount)
+                    if (couponDto != null && !string.IsNullOrEmpty(couponDto.Code) && couponDto.Code == cartDto.CartHeader.CouponCode && cartDto.CartHeader.CartTotal >= couponDto.MinAmount)
                     {
                         cartDto.CartHeader.CartTotal -= couponDto.DiscountAmount;
                         cartDto.CartHeader.Discount = couponDto.DiscountAmount;
+                    }
+                    else
+                    {
+                        //coupon not valid OR not MinAmount
+                        cartDto.CartHeader.Discount = 0;
                     }
                 }
 
