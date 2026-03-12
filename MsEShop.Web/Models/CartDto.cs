@@ -1,8 +1,9 @@
 ﻿namespace MsEShop.Web.Models
 {
-    public class EmailCartDto : CartDto
+    public class CartDto
     {
-        public string UserEmail { get; set; }
+        public CartHeaderDto CartHeader { get; set; }
+        public IEnumerable<CartDetailsDto> CartDetails { get; set; }
     }
 }
     
