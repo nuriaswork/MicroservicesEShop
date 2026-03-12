@@ -17,6 +17,7 @@
   <Folder Name="/Services/">
     <Project Path="MsEShop.Services.AuthAPI/MsEShop.Services.AuthAPI.csproj" Id="88a08e66-5b41-435f-92da-191f467147cc" />
     <Project Path="MsEShop.Services.CouponAPI/MsEShop.Services.CouponAPI.csproj" />
+    <Project Path="MsEShop.Services.EmailAPI/MsEShop.Services.EmailAPI.csproj" Id="f3715a68-6145-4876-a5d0-eb4ba8f42965" />
     <Project Path="MsEShop.Services.ProductAPI/MsEShop.Services.ProductAPI.csproj" Id="108bdfe0-d6b2-42c5-8312-dc67fafbe121" />
     <Project Path="MsEShop.Services.ShoppingCartAPI/MsEShop.Services.ShoppingCartAPI.csproj" Id="819167c0-495a-448e-aee4-9870f7469c2f" />
   </Folder>

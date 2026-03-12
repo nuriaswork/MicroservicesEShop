@@ -1,0 +1,6 @@
+@MsEShop.Services.EmailAPI_HostAddress = http://localhost:5033
+
+GET {{MsEShop.Services.EmailAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
