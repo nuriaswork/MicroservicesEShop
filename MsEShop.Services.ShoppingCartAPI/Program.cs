@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using MsEShop.Services.ShoppingCartAPI.Data;
+using MsEShop.Services.ShoppingCartAPI.Handlers;
 using MsEShop.Services.ShoppingCartAPI.Models;
 using MsEShop.Services.ShoppingCartAPI.Models.Dto;
 using MsEShop.Services.ShoppingCartAPI.Services;
@@ -29,11 +30,15 @@ IMapper mapper = new MapperConfiguration(config =>
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //for use Automapper with dependency injection
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+
+
 //We are implementing API comunication differently than from Web project, so we learn other ways to do it
 builder.Services.AddHttpClient("ProductHttpClient", 
-    client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+    client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("CoupontHttpClient",
-    client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
+    client => client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
