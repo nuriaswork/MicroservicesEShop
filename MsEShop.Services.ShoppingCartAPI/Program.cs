@@ -1,8 +1,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using MsEshop.MessageBus;
 using MsEShop.Services.ShoppingCartAPI.Data;
 using MsEShop.Services.ShoppingCartAPI.Handlers;
 using MsEShop.Services.ShoppingCartAPI.Models;
@@ -42,6 +44,8 @@ builder.Services.AddHttpClient("CoupontHttpClient",
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MsEshop.MessageBus;
 using MsEShop.Services.ShoppingCartAPI.Data;
 using MsEShop.Services.ShoppingCartAPI.Models;
 using MsEShop.Services.ShoppingCartAPI.Models.Dto;
@@ -21,13 +22,18 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
         private readonly AppDbContext _db;
         private readonly IProductService _productService;
         private readonly ICouponService _couponService;
-        public CartAPIController(IMapper mapper, AppDbContext db, IProductService productService, ICouponService couponService)
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _configuration;
+
+        public CartAPIController(IMapper mapper, AppDbContext db, IProductService productService, ICouponService couponService, IMessageBus messageBus, IConfiguration configuration)
         {
             _mapper = mapper;
             _db = db;
             _responseDto = new ResponseDto() { Success = true };
             _productService = productService;
             _couponService = couponService;
+            _messageBus = messageBus;
+            _configuration = configuration;
         }
 
         [HttpGet("GetCart/{userId}")]
@@ -174,6 +180,21 @@ namespace MsEShop.Services.ShoppingCartAPI.Controllers
                 cartHeaderFromDb.CouponCode = string.Empty;
                 _db.CartHeaders.Update(cartHeaderFromDb);
                 await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                _responseDto.Success = false;
+                _responseDto.Message = e.Message;
+            }
+            return _responseDto;
+        }
+
+        [HttpPost("EmailCartRequest")]
+        public async Task<ResponseDto> EmailCartRequest([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart"));
             }
             catch (Exception e)
             {

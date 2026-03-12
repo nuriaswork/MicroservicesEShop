@@ -17,6 +17,18 @@ namespace MsEShop.Web.Controllers
             }
         }
 
+        public string LoggedUserEmail
+        {
+            get
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    return User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
+                }
+                return string.Empty;
+            }
+        }
+
 
     }
 }

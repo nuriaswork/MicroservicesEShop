@@ -110,6 +110,42 @@ namespace MsEShop.Web.Controllers
             return RedirectToAction(nameof(CartIndex));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EmailCart()
+        {
+            EmailCartDto emailCartDto = new();
+            try
+            {
+                CartDto cartFromDB = await LoadCartDtoBasedOnLoggedUser();
+                if (cartFromDB == null || cartFromDB.CartDetails == null || cartFromDB.CartDetails.Count() <= 0)
+                {
+                    TempData["error"] = "Cart is empty, email cannot be sent. ";
+                }
+                else
+                {
+                    emailCartDto.UserEmail = LoggedUserEmail;
+                    emailCartDto.CartHeader = cartFromDB.CartHeader;
+                    emailCartDto.CartDetails = cartFromDB.CartDetails;
+
+                    var responseDto = await _cartService.EmailCart(emailCartDto);
+
+                    if (responseDto != null && responseDto.Success)
+                    {
+                        TempData["success"] = "Email is being processed and sent. You can continue shopping :)";
+                    }
+                    else
+                    {
+                        TempData["error"] = "Sorry, email cannot be sent. " + responseDto.Message;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = e.Message + e.InnerException?.Message;
+            }
+            return RedirectToAction(nameof(CartIndex));
+        }
+
         private async Task<CartDto> LoadCartDtoBasedOnLoggedUser()
         {
             var userId = LoggedUserId;

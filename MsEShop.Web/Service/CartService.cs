@@ -63,5 +63,15 @@ namespace MsEShop.Web.Service
             }, true);
         }
 
+        public async Task<ResponseDto> EmailCart(CartDto cartDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                Uri = ApisUri.ShoppingCartAPIBase + ApiControllerName + "/EmailCartRequest",
+                ApiType = Enums.ApiType.POST,
+                Data = cartDto
+            }, true);
+
+        }
     }
 }
