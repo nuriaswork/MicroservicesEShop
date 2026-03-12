@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MsEShop.Services.EmailAPI.Data;
 using MsEShop.Services.EmailAPI.Messaging;
+using MsEShop.Services.EmailAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,11 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseMySQL(builder.Configuration.GetConnectionString("MySQLConnection")!);
 });
+
+//we cannot use AddDbContext with independency injection in a Singleton instance, so we have to add a DbContextOptionsBuilder in Program.cs
+var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionBuilder.UseMySQL(builder.Configuration.GetConnectionString("MySQLConnection")!);
+builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
