@@ -1,8 +1,7 @@
 ﻿namespace MsEShop.Services.EmailAPI.Models.Dto
 {
-    public class CartDto
+    public class EmailCartDto : CartDto
     {
-        public CartHeaderDto CartHeader { get; set; }
-        public IEnumerable<CartDetailsDto> CartDetails { get; set; }
+        public string? UserEmail { get; set; }
     }
 }
