@@ -13,8 +13,10 @@ namespace MsEShop.Services.EmailAPI.Messaging
 
         private readonly string serviceBusConnectionString;
         private readonly string emailCartQueue;
+        private readonly string registerNewUserEmailQueue;
 
         private ServiceBusProcessor _emailCartProcessor;
+        private ServiceBusProcessor _registerNewUserProcessor;
 
         //As this is a singleton, we cannot access AppDbContext because it's not of the same scope. So we need to create the EmailService that wraps the AppDbContext to a Singleton with DbContextOptionsBuilder
         // We can now inject EmailService (NOT THE INTERFACE: builder.Services.AddSingleton(new EmailService(optionBuilder.Options));)
@@ -27,12 +29,17 @@ namespace MsEShop.Services.EmailAPI.Messaging
 
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBus:ConnectionString")!;
             emailCartQueue = _configuration.GetValue<string>("ServiceBus:TopicAndQueueNames:EmailShoppingCart")!;
+            registerNewUserEmailQueue = _configuration.GetValue<string>("ServiceBus:TopicAndQueueNames:RegisterNewUser")!;
 
             var client = new ServiceBusClient(serviceBusConnectionString);
 
-            //procesor that listens to the queue_topic:
+            //procesors that listens to the different queue_topic:
             _emailCartProcessor = client.CreateProcessor(emailCartQueue);
+            _registerNewUserProcessor = client.CreateProcessor(registerNewUserEmailQueue);
+
+            //inject email service for dealing with singleton database
             _emailService = emailService;
+
         }
 
         public async Task Start()
@@ -41,12 +48,20 @@ namespace MsEShop.Services.EmailAPI.Messaging
             _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
 
             await _emailCartProcessor.StartProcessingAsync();
+
+            _registerNewUserProcessor.ProcessMessageAsync += OnRegisterNewUserRquestReceive;
+            _registerNewUserProcessor.ProcessErrorAsync += ErrorHandler;
+
+            await _registerNewUserProcessor.StartProcessingAsync();
         }
 
         public async Task Stop()
         {
             await _emailCartProcessor.StopProcessingAsync();
             await _emailCartProcessor.DisposeAsync();
+
+            await _registerNewUserProcessor.StopProcessingAsync();
+            await _registerNewUserProcessor.DisposeAsync();
         }
 
 
@@ -62,15 +77,14 @@ namespace MsEShop.Services.EmailAPI.Messaging
         private async Task OnEmailCartRequestReceive(ProcessMessageEventArgs args)
         {
             //process item in queue_topic
-            var message = args.Message;
-            var body = Encoding.UTF8.GetString(message.Body);
+            string body = GetBodyFromProcessMessageEventArgs(args);
 
             EmailCartDto? emailCartDto = JsonConvert.DeserializeObject<EmailCartDto>(body);
 
             try
             {
                 //send email or whatever
-                await _emailService.EmailCartAndLog(emailCartDto);
+                if (emailCartDto != null) await _emailService.EmailCartAndLog(emailCartDto);
 
                 //set message as processed so it can be removed from the queue_topic:
                 await args.CompleteMessageAsync(args.Message);
@@ -81,6 +95,34 @@ namespace MsEShop.Services.EmailAPI.Messaging
                 throw;
             }
         }
+
+        private static string GetBodyFromProcessMessageEventArgs(ProcessMessageEventArgs args)
+        {
+            var message = args.Message;
+            var body = Encoding.UTF8.GetString(message.Body);
+            return body;
+        }
+
+        private async Task OnRegisterNewUserRquestReceive(ProcessMessageEventArgs args)
+        {
+            //process item in queue_topic
+            string body = GetBodyFromProcessMessageEventArgs(args);
+
+            string? email = JsonConvert.DeserializeObject<string>(body);
+
+            try
+            {
+                if (email != null) await _emailService.RegisterUserEmailAndLog(email);
+
+                await args.CompleteMessageAsync(args.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
 
     }
 }

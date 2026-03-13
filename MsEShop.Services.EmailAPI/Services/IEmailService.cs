@@ -5,5 +5,6 @@ namespace MsEShop.Services.EmailAPI.Services
     public interface IEmailService
     {
         Task EmailCartAndLog(EmailCartDto emailCartDto);
+        Task RegisterUserEmailAndLog(string email);
     }
 }

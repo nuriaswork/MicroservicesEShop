@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MsEshop.MessageBus;
 using MsEShop.Services.AuthAPI.Data;
 using MsEShop.Services.AuthAPI.Models;
 using MsEShop.Services.AuthAPI.Models.Dto;
@@ -24,6 +25,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 //Dependency injection
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 //Automapper:
 IMapper mapper = new MapperConfiguration(config =>

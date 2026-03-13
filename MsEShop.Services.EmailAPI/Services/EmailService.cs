@@ -36,6 +36,11 @@ namespace MsEShop.Services.EmailAPI.Services
             await LogAndEmail(mailBody.ToString(), emailCartDto.UserEmail);
         }
 
+        public async Task RegisterUserEmailAndLog(string email)
+        {
+            await LogAndEmail("New User Registration: " + email, "admin@our_app_domain.com");
+        }
+
         private async Task<bool> LogAndEmail(string message, string emailTo)
         {
             try

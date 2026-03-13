@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MsEshop.MessageBus;
 using MsEShop.Services.AuthAPI.Models.Dto;
 using MsEShop.Services.AuthAPI.Services.Interfaces;
 
@@ -10,11 +11,15 @@ namespace MsEShop.Services.AuthAPI.Controllers
     {
         private IAuthService _authService;
         protected ResponseDto _response;
+        private IMessageBus _messageBus;
+        private IConfiguration _configuration;
 
-        public AuthAPIController(IAuthService authService)
+        public AuthAPIController(IAuthService authService, IMessageBus messageBus, IConfiguration configuration)
         {
             _authService = authService;
             _response = new() { Success = true };
+            _messageBus = messageBus;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -27,6 +32,12 @@ namespace MsEShop.Services.AuthAPI.Controllers
                 _response.Message = response;
                 return BadRequest(_response);
             }
+            try
+            {
+                //logging in EmailLogger database
+                await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterNewUser"));
+            }
+            catch (Exception) { }
             return Ok(_response);
         }
 
