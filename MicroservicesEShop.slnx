@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/doc/">
     <File Path="AspNetCore Web API Cheetsheet.txt" />
+    <File Path="Cache.txt" />
     <File Path="good_practices.txt" />
     <File Path="Microservices app Architecture.png" />
     <File Path="Migrations.txt" />

@@ -1,0 +1,42 @@
+https://learn.microsoft.com/es-mx/aspnet/core/performance/caching/middleware?view=aspnetcore-8.0
+
+El almacenamiento que vamos a usar es caché de respuesta (que habilita la caché en encabezados de caché de HTTP), que no sirve para las UI. 
+Esta caché es beneficiosa para solicitudes públicas API GET o HEAD. Para UI hay que usar almacenamiento de caché de salida.
+
+SOLO SE ALMACENAN EN CACHÉ LAS RESPUESTAS QUE DEVUELVEN UN RESULTADO CORRECTO (200). El middleware OMITE cualquier otra respuesta, incluso LAS PÁGINAS DE ERROR.
+
+En Program.cs hay que añadir builder.Services.AddResponseCaching(); y app.UseResponseCaching(); (esta última siempre después de app.UseCors();)
+
+En AddResponseCaching se pueden establecer opciones: MaximumBodySize, SizeLimit, UseCaseSensitivePaths.
+
+Se puede establecer esta caché de 2 formas:
+
+1.- después de app.UseResponseCaching(); podemos establecer
+        - Cache-Control: almacena en caché las respuestas que se pueden almacenar en caché durante un máximo de 10 segundos.
+        - Vary: configura el middleware para atender una respuesta almacenada en caché solo si el encabezado Accept-Encoding de las solicitudes posteriores coincide con el de la solicitud original.
+
+app.Use(async (context, next) =>
+{
+    context.Response.GetTypedHeaders().CacheControl =
+        new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+        {
+            Public = true,
+            MaxAge = TimeSpan.FromSeconds(10)
+        };
+    context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+        new string[] { "Accept-Encoding" };
+
+    await next();
+});
+
+2.-  Lo anterior queda invalidado si en el controlador, acción o Razor page se establece el atributo [ResponseCache].
+
+
+ADVERTENCIA: Las respuestas con contenido para los clientes autenticados deben marcarse como no almacenables en caché para evitar que el middleware almacene y sirva esas respuestas.
+
+
+
+Cuando se usa MVC, controladores de API web o modelos de página de Razor Pages, el atributo [ResponseCache] especifica los parámetros necesarios para establecer los encabezados adecuados 
+para el almacenamiento en caché de respuestas. El único parámetro del atributo [ResponseCache] que requiere estrictamente el middleware es VaryByQueryKeys, que no corresponde a un encabezado HTTP real.
+https://learn.microsoft.com/es-mx/aspnet/core/performance/caching/response?view=aspnetcore-8.0#responsecache-attribute
+

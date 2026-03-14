@@ -24,6 +24,7 @@ namespace MsEShop.Services.ProductAPI.Controllers
 
         // GET: api/ProductAPI
         [HttpGet]
+        [ResponseCache(Duration = 60)]
         public ResponseDto GetProducts()
         {
             try
