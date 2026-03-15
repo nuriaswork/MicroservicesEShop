@@ -24,6 +24,17 @@ namespace MsEShop.Web.Controllers
             return View(await LoadCartDtoBasedOnLoggedUser());
         }
 
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            CartDto cartDto = await LoadCartDtoBasedOnLoggedUser();
+            OrderDto orderDto = new()
+            {
+                Cart = cartDto
+            };
+            return View(orderDto);
+        }
+
         public async Task<IActionResult> RemoveProduct(int cartDetailsId)
         {
             var responseDto = await _cartService.RemoveFromCartAsync(cartDetailsId);
